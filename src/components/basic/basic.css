@@ -1,0 +1,7 @@
+.blog-card{
+    margin:16px;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px #ccc;
+}

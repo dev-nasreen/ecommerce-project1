@@ -1,0 +1,32 @@
+.product_details {
+  .big_img_container {
+    max-height: 100%;
+
+    img {
+      height: 450px;
+      width: 90%;
+    }
+  }
+  .slick-slider {
+    width: 100%;
+    .slick-list {
+      .slick-track {
+        .slick-slide {
+          margin-right: 8px;
+          width: 80px;
+        }
+      }
+    }
+  }
+  .img_container {
+    .img1 {
+      height: 100px;
+      margin-right: 10px;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+}
