@@ -1,129 +1,93 @@
 import React, { useEffect, useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import { AiOutlineShoppingCart } from 'react-icons/ai'
-import Slider from 'react-slick'
+import { useParams } from 'react-router'
 
 const ProductDetails = () => {
-  const url = 'https://i.ibb.co/0Kn9Pvb/img1.jpg'
-  const [nav1, setNav1] = useState(null)
-  const [nav2, setNav2] = useState(null)
-  const [slider1, setSlider1] = useState(url)
-  const [slider2, setSlider2] = useState(null)
-
+  const { id } = useParams()
+  const [singlePd, setSinglePd] = useState({})
+  const url = singlePd.mainImg
   useEffect(() => {
-    setNav1(slider1)
-    setNav2(slider2)
-  })
+    fetch(`http://localhost:2000/productDetails/${id}`)
+      .then(res => res.json())
+      .then(data => setSinglePd(data[0]))
+  }, [])
 
-  const settingsMain = {
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: false,
-    asNavFor: '.slider-nav'
-  }
+  const [selected, setSelected] = useState(singlePd.mainImg)
+  const [imgUrl, setImgUrl] = useState(singlePd.mainImg)
 
-  const settingsThumbs = {
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    asNavFor: '.slider-for',
-    centerMode: true,
-    dots: false,
-    swipeToSlide: false,
-    focusOnSelect: true
-  }
-
+  const imgData = [
+    {
+      id: 1,
+      url: singlePd.mainImg
+    },
+    {
+      id: 2,
+      url: singlePd.img2
+    },
+    {
+      id: 3,
+      url: singlePd.img3
+    },
+    {
+      id: 4,
+      url: singlePd.img4
+    }
+  ]
+  useEffect(() => {
+    switch (selected) {
+      case singlePd.mainImg:
+        setImgUrl(singlePd.mainImg)
+        break
+      case singlePd.img2:
+        setImgUrl(singlePd.img2)
+        break
+      case singlePd.img3:
+        setImgUrl(singlePd.img3)
+        break
+      case singlePd.img4:
+        setImgUrl(singlePd.img4)
+        break
+      default:
+        setImgUrl(singlePd.mainImg)
+    }
+  }, [selected])
   return (
     <div className='product_details my-5'>
       <Row>
-        <Col md={6} className='align-items-center'>
+        <Col md={6} className=''>
           <div className='big_img_container'>
-            <Slider
-              {...settingsMain}
-              asNavFor={nav2}
-              ref={slider => setSlider1(slider)}
-            >
-              <div className=''>
-                <img
-                  src={url}
-                  alt='product img'
-                  className='img-fluid slick-slide-image'
-                />
-              </div>
-              <div className=''>
-                <img
-                  src='https://i.ibb.co/zxMHNvt/img2.jpg/>'
-                  alt='product img'
-                  className='img-fluid slick-slide-image'
-                />
-              </div>
-              <div className=''>
-                <img
-                  src='https://i.ibb.co/6FWjD16/img3.jpg/>'
-                  alt='product img'
-                  className='img-fluid slick-slide-image'
-                />
-              </div>
-              <div className=''>
-                <img
-                  src='https://i.ibb.co/2cQgwJC/img4.jpg/>'
-                  alt='product img'
-                  className='img-fluid slick-slide-image'
-                />
-              </div>
-            </Slider>
+            <div className=''>
+              {!selected ? (
+                <img src={singlePd.mainImg} alt='product img' className=' ' />
+              ) : (
+                <img src={selected} alt='product img' className=' ' />
+              )}
+            </div>
+          </div>
+          <div className='img_container'>
+            <div className='slide-img d-flex justify-content-center'>
+              {imgData.map(img => (
+                <div className='img1' key={img.id}>
+                  <img
+                    src={img.url}
+                    alt='product img'
+                    onClick={() => setSelected(img.url)}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         </Col>
         <Col md={6} className=' '>
           <div>
-            <h3>Product Title</h3>
-
-            <p>
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-              Recusandae quod soluta nesciunt, eos iusto velit? Quae quo porro
-              vitae voluptatem consectetur nemo fugit dicta beatae placeat modi,
-              voluptatum sapiente facere.
-            </p>
-            <h2>Price: $350</h2>
+            <h3>{singlePd.productName}</h3>
+            <p>{singlePd.description}</p>
+            <h2>Price: ${singlePd.price}</h2>
             <button className='btn btn-success mt-2'>
               <AiOutlineShoppingCart />
               <span>Add to Cart</span>
             </button>
-            <div className='img_container d-flex mt-3'>
-              <Slider
-                {...settingsThumbs}
-                asNavFor={nav1}
-                ref={slider => setSlider2(slider)}
-              >
-                <div className='img1'>
-                  <img
-                    src='https://i.ibb.co/0Kn9Pvb/img1.jpg/>'
-                    alt='product img'
-                    className='img-fluid slick-slide-image'
-                  />
-                </div>
-                <div className='img1'>
-                  <img
-                    src='https://i.ibb.co/zxMHNvt/img2.jpg/>'
-                    alt='product img'
-                    className='img-fluid slick-slide-image'
-                  />
-                </div>
-                <div className='img1'>
-                  <img
-                    src='https://i.ibb.co/6FWjD16/img3.jpg/>'
-                    alt='product img'
-                    className='img-fluid slick-slide-image'
-                  />
-                </div>
-                <div className='img1'>
-                  <img
-                    src='https://i.ibb.co/2cQgwJC/img4.jpg/>'
-                    alt='product img'
-                    className='img-fluid slick-slide-image'
-                  />
-                </div>
-              </Slider>
-            </div>
           </div>
         </Col>
       </Row>

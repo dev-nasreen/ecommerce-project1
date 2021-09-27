@@ -4,10 +4,10 @@ import { Button, Col, Container, Form, Row } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
 
 const AddProduct = () => {
-  const [imgUrl, setImgUrl] = useState('')
-  // const [img2, setImg2] = useState('');
-  // const [img3, setImg3] = useState('');
-  // const [img4, setImg4] = useState('');
+  const [mainImg, setMainImg] = useState('')
+  const [img2, setImg2] = useState('')
+  const [img3, setImg3] = useState('')
+  const [img4, setImg4] = useState('')
   const {
     register,
     handleSubmit,
@@ -19,7 +19,10 @@ const AddProduct = () => {
       productName: data.pname,
       price: data.price,
       description: data.description,
-      imageUrl: imgUrl
+      mainImg: mainImg,
+      img2: img2,
+      img3: img3,
+      img4: img4
     }
 
     fetch('http://localhost:2000/addProduct', {
@@ -32,21 +35,34 @@ const AddProduct = () => {
       .catch(err => console.log(err))
   }
 
-  const handleImgUrl = event => {
+  const handleImgUrl = (imgFile, setImg) => {
     const imgData = new FormData()
     imgData.set('key', 'f8abae8e21b7331f6bd788466b3eb5a1')
-    imgData.append('image', event.target.files[0])
+    imgData.append('image', imgFile[0])
 
     axios
       .post('https://api.imgbb.com/1/upload', imgData)
       .then(res => {
         if (res) {
-          setImgUrl(res.data.data.display_url)
+          setImg(res.data.data.display_url)
         }
 
         console.log(res.data.data.display_url)
       })
       .catch(err => console.log(err))
+  }
+
+  const handleMainImg = file => {
+    handleImgUrl(file, setMainImg)
+  }
+  const handleImg2 = file => {
+    handleImgUrl(file, setImg2)
+  }
+  const handleImg3 = file => {
+    handleImgUrl(file, setImg3)
+  }
+  const handleImg4 = file => {
+    handleImgUrl(file, setImg4)
   }
 
   return (
@@ -82,12 +98,47 @@ const AddProduct = () => {
                 <Form.Control
                   as='textarea'
                   rows={3}
+                  {...register('short_description')}
+                />
+              </Form.Group>
+              <Form.Group
+                className='mb-3'
+                controlId='exampleForm.ControlTextarea1'
+              >
+                <Form.Label>Product description</Form.Label>
+                <Form.Control
+                  as='textarea'
+                  rows={3}
                   {...register('description')}
                 />
               </Form.Group>
               <Form.Group controlId='formFileMultiple' className='mb-3'>
-                <Form.Label>Product Images</Form.Label>
-                <Form.Control type='file' multiple onChange={handleImgUrl} />
+                <Form.Label>Product Main Image</Form.Label>
+                <Form.Control
+                  type='file'
+                  onChange={e => handleMainImg(e.target.files)}
+                />
+              </Form.Group>
+              <Form.Group controlId='formFileMultiple' className='mb-3'>
+                <Form.Label> Image 2</Form.Label>
+                <Form.Control
+                  type='file'
+                  onChange={e => handleImg2(e.target.files)}
+                />
+              </Form.Group>
+              <Form.Group controlId='formFileMultiple' className='mb-3'>
+                <Form.Label>Image 3</Form.Label>
+                <Form.Control
+                  type='file'
+                  onChange={e => handleImg3(e.target.files)}
+                />
+              </Form.Group>
+              <Form.Group controlId='formFileMultiple' className='mb-3'>
+                <Form.Label>Image 3</Form.Label>
+                <Form.Control
+                  type='file'
+                  onChange={e => handleImg4(e.target.files)}
+                />
               </Form.Group>
               <Button
                 style={{
